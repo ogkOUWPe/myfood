@@ -33,7 +33,7 @@ public class Main extends TabActivity {
     	extras.put("bool_e", false );
     	extras.put("int_f", 999 );
     	tabSpecFactory(null,"tab01",TabShopList.class,"업소");
-    	tabSpecFactory(null,"tab02",UnimplementedSubPage02.class,"지도");
+    	tabSpecFactory(null,"tab02",TabMap.class,"지도");
     	tabSpecFactory(null,"tab03",UnimplementedSubPage03.class,"검색");
     	tabSpecFactory(extras,"tab04",UnimplementedSubPage04.class,"설정");
     }
