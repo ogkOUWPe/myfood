@@ -13,7 +13,7 @@ public class ShopDAO {
 	private SQLiteDatabase db;
 	private ShopDOH doh;
 	private Context context;
-	private String name = "restaurants.db";
+	private String name = "myfood.db";
 	private int version = 1;
 
 	public ShopDAO(Context context) {
