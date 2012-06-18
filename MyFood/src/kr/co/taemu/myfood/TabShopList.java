@@ -75,7 +75,7 @@ public class TabShopList extends Activity implements OnClickListener {
 		edtSearch.setText("");
 	}
 
-	@Override
+	
 	public void onClick(View v) {
 		query.delete(0, query.length());
 		query.append(edtSearch.getText().toString());

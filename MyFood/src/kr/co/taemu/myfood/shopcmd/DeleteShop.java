@@ -13,7 +13,6 @@ public class DeleteShop extends ShopCommand {
 		super(dao, adapter,query, shops);
 	}
 
-	@Override
 	public void exec() {
 		String shopNameForQuery = query.toString();
 		if (!shopNameForQuery.equals("")

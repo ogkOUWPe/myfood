@@ -14,7 +14,6 @@ public class DropShopTable extends ShopCommand {
 		super(dao, adapter, query, shops);
 	}
 
-	@Override
 	public void exec() {
 		if (dao.dropShopTable()) {
 			adapter.notifyDataSetInvalidated();

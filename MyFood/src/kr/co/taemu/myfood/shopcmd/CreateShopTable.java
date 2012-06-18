@@ -13,7 +13,6 @@ public class CreateShopTable extends ShopCommand {
 		super(dao, adapter, query, shops);
 	}
 
-	@Override
 	public void exec() {
 		if (dao.createShopTable()) {
 			adapter.notifyDataSetInvalidated();

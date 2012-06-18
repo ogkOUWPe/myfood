@@ -25,7 +25,6 @@ public class InsertShop extends ShopCommand {
 		createInputDialog();
 	}
 
-	@Override
 	public void exec() {
 		dlg.show();
 	}
@@ -43,7 +42,6 @@ public class InsertShop extends ShopCommand {
 			edtDlgContents = (EditText) layout.findViewById(R.id.edtContents);
 		}
 
-		@Override
 		public void onClick(View v) {
 			String name = edtDlgName.getText().toString();
 			String tel = edtDlgTel.getText().toString();
