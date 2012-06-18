@@ -8,34 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/btnCreate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Create" />
-
-        <Button
-            android:id="@+id/btnDrop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Drop" />
-
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delete" />
-
-        <Button
-            android:id="@+id/btnInsert"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Insert" />
-
     </LinearLayout>
 
     <LinearLayout

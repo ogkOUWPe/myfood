@@ -3,10 +3,6 @@ package kr.co.taemu.myfood;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kr.co.taemu.myfood.shopcmd.CreateShopTable;
-import kr.co.taemu.myfood.shopcmd.DeleteShop;
-import kr.co.taemu.myfood.shopcmd.DropShopTable;
-import kr.co.taemu.myfood.shopcmd.InsertShop;
 import kr.co.taemu.myfood.shopcmd.SearchShop;
 import kr.co.taemu.myfood.shopcmd.ShopCommand;
 import android.app.Activity;
@@ -36,11 +32,7 @@ public class TabShopList extends Activity implements OnClickListener {
 		edtSearch = (EditText) findViewById(R.id.editText1);
 		lstShops = (ListView) findViewById(R.id.lstShops);
 
-		((Button) findViewById(R.id.btnCreate)).setOnClickListener(this);
-		((Button) findViewById(R.id.btnDrop)).setOnClickListener(this);
 		((Button) findViewById(R.id.btnSearch)).setOnClickListener(this);
-		((Button) findViewById(R.id.btnDelete)).setOnClickListener(this);
-		((Button) findViewById(R.id.btnInsert)).setOnClickListener(this);
 
 	}
 
@@ -61,11 +53,7 @@ public class TabShopList extends Activity implements OnClickListener {
 		
 		query = new StringBuilder();
 		cmds = new HashMap<Integer,ShopCommand>();
-		cmds.put(R.id.btnCreate, new CreateShopTable(dao,adapter,null,null));
-		cmds.put(R.id.btnInsert, new InsertShop(dao,adapter,query,shops,this));
 		cmds.put(R.id.btnSearch, new SearchShop(dao,adapter,query,shops));
-		cmds.put(R.id.btnDelete, new DeleteShop(dao,adapter,query,shops));
-		cmds.put(R.id.btnDrop, new DropShopTable(dao,adapter,null,null));
 	}
 
 	@Override
