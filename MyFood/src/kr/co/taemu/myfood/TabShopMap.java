@@ -18,7 +18,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class TabMap extends MapActivity implements OnClickListener{
+public class TabShopMap extends MapActivity implements OnClickListener{
 	Drawable drawable;
 	ShopOverlay shopOverlay;
 	List<Overlay> list;
@@ -35,7 +35,7 @@ public class TabMap extends MapActivity implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tab_map);
+		setContentView(R.layout.tab_shop_map);
 		
 		setupMap();
 		findViewById(R.id.btnGenerateData).setOnClickListener(this);

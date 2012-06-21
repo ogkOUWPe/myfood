@@ -27,7 +27,7 @@
         </activity>
         <activity android:name=".TabShopList" >
         </activity>
-        <activity android:name=".TabMap" >
+        <activity android:name=".TabShopMap" >
         </activity>
         <activity android:name=".UnimplementedSubPage03" >
         </activity>
