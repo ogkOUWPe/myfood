@@ -6,11 +6,9 @@ import kr.co.taemu.myfood.ShopAdapter;
 import kr.co.taemu.myfood.ShopDAO;
 import kr.co.taemu.myfood.ShopDTO;
 
-
 public class DropShopTable extends ShopCommand {
 
-	public DropShopTable(ShopDAO dao, ShopAdapter adapter,
-			StringBuilder query, ArrayList<ShopDTO> shops) {
+	public DropShopTable(ShopDAO dao, ShopAdapter adapter, StringBuilder query, ArrayList<ShopDTO> shops) {
 		super(dao, adapter, query, shops);
 	}
 

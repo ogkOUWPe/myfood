@@ -7,12 +7,11 @@ import kr.co.taemu.myfood.ShopDAO;
 import kr.co.taemu.myfood.ShopDTO;
 
 public class SearchShop extends ShopCommand {
-	
-	public SearchShop(ShopDAO dao, ShopAdapter adapter,
-			StringBuilder query, ArrayList<ShopDTO> shops) {
+
+	public SearchShop(ShopDAO dao, ShopAdapter adapter, StringBuilder query, ArrayList<ShopDTO> shops) {
 		super(dao, adapter, query, shops);
 	}
-	
+
 	public void exec() {
 		String shopNameForQuery = query.toString();
 		if (shopNameForQuery.equals("")) {
@@ -23,8 +22,7 @@ public class SearchShop extends ShopCommand {
 				adapter.notifyDataSetChanged();
 			}
 		} else if (!shopNameForQuery.equals("")) {
-			ArrayList<ShopDTO> matchedShops = dao
-					.fetchShopByName(shopNameForQuery);
+			ArrayList<ShopDTO> matchedShops = dao.fetchShopByName(shopNameForQuery);
 			if (matchedShops != null) {
 				shops.clear();
 				shops.addAll(matchedShops);

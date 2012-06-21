@@ -22,13 +22,13 @@ public class TabShopList extends Activity implements OnClickListener {
 	EditText edtSearch;
 	StringBuilder query;
 
-	HashMap<Integer,ShopCommand> cmds;
-	
+	HashMap<Integer, ShopCommand> cmds;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_shop_list);
-		
+
 		edtSearch = (EditText) findViewById(R.id.editText1);
 		lstShops = (ListView) findViewById(R.id.lstShops);
 
@@ -41,29 +41,28 @@ public class TabShopList extends Activity implements OnClickListener {
 		super.onResume();
 		dao = new ShopDAO(this);
 		dao.open();
-		
+
 		ArrayList<ShopDTO> allShops = dao.fetchAllShop();
 		if (allShops != null) {
 			shops = allShops;
 		} else {
-			shops = new ArrayList<ShopDTO>();	
+			shops = new ArrayList<ShopDTO>();
 		}
 		adapter = new ShopAdapter(this, shops);
 		lstShops.setAdapter(adapter);
-		
+
 		query = new StringBuilder();
-		cmds = new HashMap<Integer,ShopCommand>();
-		cmds.put(R.id.btnSearch, new SearchShop(dao,adapter,query,shops));
+		cmds = new HashMap<Integer, ShopCommand>();
+		cmds.put(R.id.btnSearch, new SearchShop(dao, adapter, query, shops));
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		dao.close();	
+		dao.close();
 		edtSearch.setText("");
 	}
 
-	
 	public void onClick(View v) {
 		query.delete(0, query.length());
 		query.append(edtSearch.getText().toString());

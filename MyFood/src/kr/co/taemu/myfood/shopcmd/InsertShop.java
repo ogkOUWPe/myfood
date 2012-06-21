@@ -19,8 +19,7 @@ public class InsertShop extends ShopCommand {
 	private Context context;
 	private AlertDialog dlg;
 
-	public InsertShop(ShopDAO dao, ShopAdapter adapter, StringBuilder query,
-			ArrayList<ShopDTO> shops, Context context) {
+	public InsertShop(ShopDAO dao, ShopAdapter adapter, StringBuilder query, ArrayList<ShopDTO> shops, Context context) {
 		super(dao, adapter, query, shops);
 		this.context = context;
 		createInputDialog();

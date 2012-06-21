@@ -9,7 +9,7 @@ public class ResetShop extends ShopCommand {
 	}
 
 	public void exec() {
-		if ( dao.dropShopTable() ) {
+		if (dao.dropShopTable()) {
 			if (dao.createShopTable()) {
 			}
 		}

@@ -7,16 +7,14 @@ import kr.co.taemu.myfood.ShopDAO;
 import kr.co.taemu.myfood.ShopDTO;
 
 public class DeleteShop extends ShopCommand {
-	
-	public DeleteShop(ShopDAO dao, ShopAdapter adapter,
-			StringBuilder query, ArrayList<ShopDTO> shops) {
-		super(dao, adapter,query, shops);
+
+	public DeleteShop(ShopDAO dao, ShopAdapter adapter, StringBuilder query, ArrayList<ShopDTO> shops) {
+		super(dao, adapter, query, shops);
 	}
 
 	public void exec() {
 		String shopNameForQuery = query.toString();
-		if (!shopNameForQuery.equals("")
-				&& dao.deleteShopByName(shopNameForQuery)) {
+		if (!shopNameForQuery.equals("") && dao.deleteShopByName(shopNameForQuery)) {
 
 			ArrayList<ShopDTO> allShops = dao.fetchAllShop();
 			if (shops != null) {

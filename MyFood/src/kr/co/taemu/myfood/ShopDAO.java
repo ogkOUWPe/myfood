@@ -49,7 +49,7 @@ public class ShopDAO {
 		Log.e("DB", sql);
 		try {
 			db.execSQL(sql);
-			Toast.makeText(context,sql, Toast.LENGTH_SHORT).show();
+//			Toast.makeText(context,sql, Toast.LENGTH_SHORT).show();
 			return true;
 		} catch (SQLException e) {
 			Log.e("DB", e.getMessage());

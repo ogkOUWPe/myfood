@@ -8,8 +8,7 @@ import kr.co.taemu.myfood.ShopDTO;
 
 public class CreateShopTable extends ShopCommand {
 
-	public CreateShopTable(ShopDAO dao, ShopAdapter adapter,
-			StringBuilder query, ArrayList<ShopDTO> shops) {
+	public CreateShopTable(ShopDAO dao, ShopAdapter adapter, StringBuilder query, ArrayList<ShopDTO> shops) {
 		super(dao, adapter, query, shops);
 	}
 

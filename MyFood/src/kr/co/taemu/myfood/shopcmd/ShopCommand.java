@@ -11,9 +11,8 @@ public abstract class ShopCommand implements Command {
 	protected ShopAdapter adapter;
 	protected StringBuilder query;
 	protected ArrayList<ShopDTO> shops;
-	
-	public ShopCommand(ShopDAO dao, ShopAdapter adapter,
-			StringBuilder query,ArrayList<ShopDTO> shops) {
+
+	public ShopCommand(ShopDAO dao, ShopAdapter adapter, StringBuilder query, ArrayList<ShopDTO> shops) {
 		this.dao = dao;
 		this.adapter = adapter;
 		this.query = query;

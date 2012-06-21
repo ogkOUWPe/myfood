@@ -10,7 +10,7 @@ public class BulkInsertShop extends ShopCommand {
 	private StringBuilder minlon;
 	private StringBuilder maxlat;
 	private StringBuilder maxlon;
-	private int insertAmount=0;
+	private int limit=0;
 	private static int generatedItemCount=0;
 
 	public BulkInsertShop(ShopDAO dao,
@@ -18,14 +18,14 @@ public class BulkInsertShop extends ShopCommand {
 							StringBuilder minlon, 
 							StringBuilder maxlat, 
 							StringBuilder maxlon,
-							int insertAmount
+							int limit
 			) {
 		super(dao, null, null, null);
 		this.minlat = minlat;
 		this.minlon = minlon;
 		this.maxlat = maxlat;
 		this.maxlon = maxlon;
-		this.insertAmount = insertAmount;
+		this.limit = limit;
 	}
 
 	public void exec() {
@@ -34,7 +34,7 @@ public class BulkInsertShop extends ShopCommand {
 		double dmaxlat = Double.parseDouble(maxlat.toString());
 		double dmaxlon = Double.parseDouble(maxlon.toString());
 		
-		for(int i =generatedItemCount; i < generatedItemCount+insertAmount; ++i) {
+		for(int i =generatedItemCount; i < generatedItemCount+limit; ++i) {
 			String randomLat = Double.toString((dminlat + Math.random()*(dmaxlat - dminlat)));
 			String randomLon = Double.toString((dminlon + Math.random()*(dmaxlon - dminlon)));
 					
@@ -49,7 +49,7 @@ public class BulkInsertShop extends ShopCommand {
 			}
 		}
 		
-		generatedItemCount += insertAmount;
+		generatedItemCount += limit;
 	}
 
 }

@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class ShopDOH extends SQLiteOpenHelper {
-	public static final String TBL= "shop";
+	public static final String TBL = "shop";
 	public static final String IDX = "_id";
 	public static final String NAM = "name";
 	public static final String IMG = "image";
@@ -22,8 +22,7 @@ public class ShopDOH extends SQLiteOpenHelper {
 	public static final String EDT = "editdate";
 	private Context context;
 
-	public ShopDOH(Context context, String name, CursorFactory factory,
-			int version) {
+	public ShopDOH(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		this.context = context;
 	}
@@ -35,32 +34,22 @@ public class ShopDOH extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.e("DB","Upgrading db from version "+oldVersion+" to "+newVersion);
-		String sql = "drop table if exists "+ TBL;
+		Log.e("DB", "Upgrading db from version " + oldVersion + " to " + newVersion);
+		String sql = "drop table if exists " + TBL;
 		db.execSQL(sql);
-		Log.e("DB",sql);
+		Log.e("DB", sql);
 	}
-	
+
 	private void createTable(SQLiteDatabase db) {
-		String sql = "create table "+ TBL +"(" +
-					IDX+" integer primary key autoincrement,"+
-					NAM+" string,"+
-					IMG+" string,"+
-					TEL+" string,"+
-					SAD+" string,"+
-					LON+" float,"+
-					LAT+" float,"+
-					RAT+" int,"+
-					CON+" text,"+
-					REG+" date,"+
-					EDT+" date"+
-					");";
+		String sql = "create table " + TBL + "(" + IDX + " integer primary key autoincrement," + NAM + " string," + IMG
+		    + " string," + TEL + " string," + SAD + " string," + LON + " float," + LAT + " float," + RAT + " int," + CON
+		    + " text," + REG + " date," + EDT + " date" + ");";
 		try {
 			db.execSQL(sql);
-			Log.e("DB",sql);
-			Toast.makeText(context,sql, Toast.LENGTH_SHORT).show();
+			Log.e("DB", sql);
+			Toast.makeText(context, sql, Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
-			Log.e("DB",e.getMessage());
+			Log.e("DB", e.getMessage());
 		}
 	}
 }
