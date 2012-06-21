@@ -20,6 +20,8 @@ public class ShopDTO {
 		this.tel = tel;
 		this.image = image;
 		this.contents = contents;
+		this.lat = "0";
+		this.lon = "0"; 
 	}
 	
 	public ShopDTO(String name,String tel,String image,String contents,String lon, String lat) {

@@ -43,7 +43,7 @@ public class ShopDAO {
 				"'"+shop.getImage()  +"'" +","+ // String type "'"+ ... +"'" 
 				"'"+shop.getDetail() +"'" +","+ // String type "'"+ ... +"'" 
 				    shop.getLat()         +","+ // Float type + ... +
-				    shop.getLon()         +","+ // Float type + ... +
+				    shop.getLon()         + // Float type + ... + and Last Item
 				");";
 		
 		Log.e("DB", sql);
