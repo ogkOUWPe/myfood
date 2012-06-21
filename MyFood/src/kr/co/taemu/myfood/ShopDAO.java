@@ -34,12 +34,18 @@ public class ShopDAO {
 				ShopDOH.NAM + "," +
 				ShopDOH.TEL + "," +
 				ShopDOH.IMG + "," +
-				ShopDOH.CON + ")" +
-				"values('" + 
-				shop.getName() + "','"+ 
-				shop.getTel()   + "','" +
-				shop.getImage() + "','" + 
-				shop.getDetail()+"');";
+				ShopDOH.CON + "," +
+				ShopDOH.LAT + "," +
+				ShopDOH.LON + ")" +
+				"values(" + 
+				"'"+shop.getName()   +"'" +","+ // String type "'"+ ... +"'" 
+				"'"+shop.getTel()    +"'" +","+ // String type "'"+ ... +"'" 
+				"'"+shop.getImage()  +"'" +","+ // String type "'"+ ... +"'" 
+				"'"+shop.getDetail() +"'" +","+ // String type "'"+ ... +"'" 
+				    shop.getLat()         +","+ // Float type + ... +
+				    shop.getLon()         +","+ // Float type + ... +
+				");";
+		
 		Log.e("DB", sql);
 		try {
 			db.execSQL(sql);
@@ -70,11 +76,39 @@ public class ShopDAO {
 						ShopDOH.NAM+","+
 						ShopDOH.TEL+","+
 						ShopDOH.IMG+","+
-						ShopDOH.CON+
+						ShopDOH.CON+","+
+						ShopDOH.LAT+","+
+						ShopDOH.LON+
 						" from " + 
 						ShopDOH.TBL +
 						" where " + 
 						ShopDOH.NAM+ "='" + searchName+"'";
+		try {
+			Log.e("DB", sql);
+			Toast.makeText(context,sql, Toast.LENGTH_SHORT).show();
+			return getShopsFromSql(sql);
+		} catch (Exception e) {
+			Log.e("DB", e.getMessage());
+		}
+		return null;
+	}
+	
+	
+	public ArrayList<ShopDTO> fetchShopByRange(String minLat,String minLon,String maxLat, String maxLon) {
+		String sql = "select "+
+						ShopDOH.NAM+","+
+						ShopDOH.TEL+","+
+						ShopDOH.IMG+","+
+						ShopDOH.CON+","+
+						ShopDOH.LAT+","+
+						ShopDOH.LON+
+						" from " + 
+						ShopDOH.TBL +
+						" where " + 
+						ShopDOH.LAT+ " > " + minLat+" and "+
+						ShopDOH.LON+ " > " + minLon+" and "+
+						ShopDOH.LAT+ " < " + maxLat+" and "+
+						ShopDOH.LON+ " < " + maxLon;
 		try {
 			Log.e("DB", sql);
 			Toast.makeText(context,sql, Toast.LENGTH_SHORT).show();
@@ -90,7 +124,9 @@ public class ShopDAO {
 						ShopDOH.NAM + "," + 
 						ShopDOH.TEL + "," +
 						ShopDOH.IMG + "," + 
-						ShopDOH.CON + " " + 
+						ShopDOH.CON + "," + 
+						ShopDOH.LAT + "," + 
+						ShopDOH.LON + " " + 
 						"from " + ShopDOH.TBL;
 		try {
 			Log.e("DB", sql);
@@ -106,15 +142,23 @@ public class ShopDAO {
 		ArrayList<ShopDTO> shops = new ArrayList<ShopDTO>();
 		Cursor c = db.rawQuery(sql, null);
 		c.moveToFirst();
+		int name_column = c.getColumnIndex(ShopDOH.NAM);
+		int tel_column = c.getColumnIndex(ShopDOH.TEL);
+		int image_column = c.getColumnIndex(ShopDOH.IMG);
+		int contents_column = c.getColumnIndex(ShopDOH.CON);
+		int lat_column = c.getColumnIndex(ShopDOH.LAT);
+		int lon_column = c.getColumnIndex(ShopDOH.LON);
 		while (!c.isAfterLast()) {
-			String name = c.getString(0);
-			String tel = c.getString(1);
-			String image = c.getString(2);
-			String contents = c.getString(3);
+			String name = c.getString(name_column);
+			String tel = c.getString(tel_column);
+			String image = c.getString(image_column);
+			String contents = c.getString(contents_column);
+			String lat = c.getString(lat_column);
+			String lon = c.getString(lon_column);
 			c.moveToNext();
-			shops.add(new ShopDTO(name, tel, image, contents));
+			shops.add(new ShopDTO(name, tel, image, contents,lat,lon));
 			Log.e("DB", "DATA name:" + name + " tel:" + tel + " image:" + image
-					+ " contents:" + contents);
+					+ " contents:" + contents+ " lat:" + lat+ " lon:" + lon);
 		}
 		c.close();
 		return shops;

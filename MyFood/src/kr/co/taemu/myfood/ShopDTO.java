@@ -8,18 +8,24 @@ public class ShopDTO {
 	String image;
 	String tel;
 	String saddr;
-	float lon; // 위도
-	float lat; // 경도
-	int rating;
+	String lon; // 위도
+	String lat; // 경도
+	String rating;
 	String contents;
 	Date regdate;
 	Date edtdate;
-	
+
 	public ShopDTO(String name,String tel,String image,String contents) {
 		this.name = name;
 		this.tel = tel;
 		this.image = image;
 		this.contents = contents;
+	}
+	
+	public ShopDTO(String name,String tel,String image,String contents,String lon, String lat) {
+		this(name,tel,image,contents);
+		this.lon = lon;
+		this.lat = lat;
 	}
 	
 	public int getIdx() {
@@ -52,22 +58,22 @@ public class ShopDTO {
 	public void setSaddr(String saddr) {
 		this.saddr = saddr;
 	}
-	public float getLon() {
+	public String getLon() {
 		return lon;
 	}
-	public void setLon(float lon) {
+	public void setLon(String lon) {
 		this.lon = lon;
 	}
-	public float getLat() {
+	public String getLat() {
 		return lat;
 	}
-	public void setLat(float lat) {
+	public void setLat(String lat) {
 		this.lat = lat;
 	}
-	public int getRating() {
+	public String getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(String rating) {
 		this.rating = rating;
 	}
 	public String getDetail() {

@@ -18,9 +18,18 @@ public class TabMap extends MapActivity {
 	List<Overlay> list;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_map);
+		
+		setupMap();
+	}
+	
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
+	
+	private void setupMap() {
 		MapView mapView = (MapView)findViewById(R.id.mapView);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(false);
@@ -35,10 +44,5 @@ public class TabMap extends MapActivity {
 		OverlayItem overlayItem = new OverlayItem(p, "", "");
 		shopOverlay.addOverlay(overlayItem);
 		list.add(shopOverlay);
-	}
-	
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
 	}
 }
