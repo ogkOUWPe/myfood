@@ -64,11 +64,11 @@ public class TabShopMap extends MapActivity implements OnClickListener, SearchSh
 		dao.open();
 
 		cmds = new HashMap<Integer, ShopCommand>();
-		SearchShopByRange ssbr = new SearchShopByRange(dao, mapView, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 100);
+		SearchShopByRange ssbr = new SearchShopByRange(dao, mapView, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 10);
 		ssbr.setOnComplete(this);
 
 		cmds.put(R.id.btnSearchPlaces, ssbr);
-		cmds.put(R.id.btnGenerateData, new BulkInsertShop(dao, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 100));
+		cmds.put(R.id.btnGenerateData, new BulkInsertShop(dao, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 1000));
 		cmds.put(R.id.btnResetData, new ResetShop(dao));
 	}
 
@@ -137,4 +137,5 @@ public class TabShopMap extends MapActivity implements OnClickListener, SearchSh
 		list.add(shopOverlay);
 		mapView.invalidate();
 	}
+	
 }
