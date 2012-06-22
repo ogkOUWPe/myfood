@@ -111,7 +111,6 @@ public class ShopDAO {
 						ShopDOH.LON+ " < " + maxLon;
 		try {
 			Log.e("DB", sql);
-//			Toast.makeText(context,sql, Toast.LENGTH_SHORT).show();
 			return getShopsFromSql(sql);
 		} catch (Exception e) {
 			Log.e("DB", e.getMessage());
