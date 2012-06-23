@@ -50,10 +50,13 @@ public class ShopAdapter extends ArrayAdapter<ShopDTO> {
 		String tel = restaurants.get(position).getTel();
 		String detail = restaurants.get(position).getDetail();
 		String imgpath = restaurants.get(position).getImage();
+		
 		holder.txtName.setText(name);
 		holder.txtTel.setText(tel);
 		holder.txtDetail.setText(detail);
 		holder.rbRating.setRating((float) 3.5);
+		holder.imgPath = imgpath;
+		
 		File imgFile = new File(imgpath);
 		if (imgFile.exists()) {
 			Bitmap bm = BitmapFactory.decodeFile(imgpath);
@@ -65,11 +68,12 @@ public class ShopAdapter extends ArrayAdapter<ShopDTO> {
 		return convertView;
 	}
 
-	static class ViewHolder {
+	public static class ViewHolder {
 		TextView txtName;
 		TextView txtTel;
 		TextView txtDetail;
 		ImageView imgRest;
 		RatingBar rbRating;
+		String imgPath;
 	}
 }
