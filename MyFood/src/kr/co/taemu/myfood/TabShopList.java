@@ -76,9 +76,9 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 	  Intent intent = new Intent(this,TabShopView.class);
 	  ViewHolder holder = (ViewHolder)arg1.getTag();
-	  intent.putExtra("name",holder.txtName.toString());
-		intent.putExtra("tel",holder.txtTel.toString());
-		intent.putExtra("detail",holder.txtDetail.toString());
+	  intent.putExtra("name",holder.txtName.getText().toString());
+		intent.putExtra("tel",holder.txtTel.getText().toString());
+		intent.putExtra("detail",holder.txtDetail.getText().toString());
 		intent.putExtra("imagepath",holder.imgPath);
 		startActivity(intent);
   }
