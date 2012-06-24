@@ -27,7 +27,10 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 	StringBuilder query;
 
 	HashMap<Integer, ShopCommand> cmds;
-
+	
+	private int index=0;
+	private int top=0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +42,7 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		((Button) findViewById(R.id.btnSearch)).setOnClickListener(this);
 		lstShops.setOnItemClickListener(this);
 	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -54,6 +57,8 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		}
 		adapter = new ShopAdapter(this, shops);
 		lstShops.setAdapter(adapter);
+		
+		lstShops.setSelectionFromTop(index, top);
 
 		query = new StringBuilder();
 		cmds = new HashMap<Integer, ShopCommand>();
@@ -65,6 +70,10 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		super.onPause();
 		dao.close();
 		edtSearch.setText("");
+		
+		index = lstShops.getFirstVisiblePosition();
+	  View v = lstShops.getChildAt(0);
+	  top = (v == null) ? 0 : v.getTop();
 	}
 
 	public void onClick(View v) {
@@ -80,7 +89,7 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		intent.putExtra("tel",holder.txtTel.getText().toString());
 		intent.putExtra("detail",holder.txtDetail.getText().toString());
 		intent.putExtra("imagepath",holder.imgPath);
-		startActivity(intent);
+		TabShopListActivityGroup parent = (TabShopListActivityGroup)getParent();
+		parent.startDetailView(intent);
   }
-
 }

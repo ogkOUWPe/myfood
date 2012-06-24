@@ -25,6 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TabShopListActivityGroup" >
+        </activity>
         <activity android:name=".TabShopList" >
         </activity>
         <activity android:name=".TabShopView" >
