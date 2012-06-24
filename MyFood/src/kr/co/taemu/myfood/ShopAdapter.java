@@ -50,12 +50,16 @@ public class ShopAdapter extends ArrayAdapter<ShopDTO> {
 		String tel = restaurants.get(position).getTel();
 		String detail = restaurants.get(position).getDetail();
 		String imgpath = restaurants.get(position).getImage();
+		String lat = restaurants.get(position).getLat();
+		String lon = restaurants.get(position).getLon();
 		
 		holder.txtName.setText(name);
 		holder.txtTel.setText(tel);
 		holder.txtDetail.setText(detail);
 		holder.rbRating.setRating((float) 3.5);
 		holder.imgPath = imgpath;
+		holder.lat = lat;
+		holder.lon = lon;
 		
 		File imgFile = new File(imgpath);
 		if (imgFile.exists()) {
@@ -75,5 +79,7 @@ public class ShopAdapter extends ArrayAdapter<ShopDTO> {
 		ImageView imgRest;
 		RatingBar rbRating;
 		String imgPath;
+		String lat;
+		String lon;
 	}
 }

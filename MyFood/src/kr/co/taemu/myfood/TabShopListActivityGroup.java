@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 
 public class TabShopListActivityGroup extends ActivityGroup {
-	private Intent listIntent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +16,9 @@ public class TabShopListActivityGroup extends ActivityGroup {
 	
 	public void startListView() {
 		LocalActivityManager lam  = getLocalActivityManager(); 
-		listIntent = new Intent(this,TabShopList.class);
-	  listIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	  View view = lam.startActivity("list",listIntent).getDecorView();
+		Intent intent = new Intent(this,TabShopList.class);
+	  intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	  View view = lam.startActivity("list", intent).getDecorView();
 	  this.setContentView(view);
 	}
 	

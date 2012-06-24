@@ -33,7 +33,8 @@ public class TabShopMap extends MapActivity implements OnClickListener, SearchSh
 	StringBuilder sbmaxLon;
 
 	MapView mapView;
-
+	MapController mc;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,6 +70,8 @@ public class TabShopMap extends MapActivity implements OnClickListener, SearchSh
 		cmds.put(R.id.btnSearchPlaces, ssbr);
 		cmds.put(R.id.btnGenerateData, new BulkInsertShop(dao, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 1000));
 		cmds.put(R.id.btnResetData, new ResetShop(dao));
+		
+		drawCenterMarker();
 	}
 
 	@Override
@@ -76,22 +79,33 @@ public class TabShopMap extends MapActivity implements OnClickListener, SearchSh
 		super.onPause();
 		dao.close();
 	}
+	
+	
+	public void drawCenterMarker() {
+		Main m = (Main)getParent();
+		String lat = m.mapCenterLat;
+		String lon = m.mapCenterLon;
+		if ( lat != null && lon != null ) {
+			ShopOverlay shopOverlay = new ShopOverlay(drawable);
+			int dlat = (int)(Double.parseDouble(lat) * 1E6);
+			int dlon = (int)(Double.parseDouble(lon) * 1E6);
+			GeoPoint p = new GeoPoint(dlat, dlon);
+			OverlayItem overlayItem = new OverlayItem(p, "", "");
+			shopOverlay.addOverlay(overlayItem);
+			list.add(shopOverlay);
+			mc.animateTo(p);
+		}
+	}
 
 	private void setupMap() {
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(false);
-
-		GeoPoint p = new GeoPoint(37519789, 126940308);
-		MapController mc = mapView.getController();
-		mc.animateTo(p);
-		mc.setZoom(15); // 1 ~ 21
-		list = mapView.getOverlays();
+		
+		mc = mapView.getController();
 		drawable = this.getResources().getDrawable(R.drawable.arrow);
-		ShopOverlay shopOverlay = new ShopOverlay(drawable);
-		OverlayItem overlayItem = new OverlayItem(p, "", "");
-		shopOverlay.addOverlay(overlayItem);
-		list.add(shopOverlay);
+		list = mapView.getOverlays();
+		mc.setZoom(15); // 1 ~ 21
 	}
 
 	public void onClick(View v) {

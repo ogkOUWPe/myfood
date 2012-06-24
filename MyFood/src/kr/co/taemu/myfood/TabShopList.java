@@ -89,6 +89,8 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		intent.putExtra("tel",holder.txtTel.getText().toString());
 		intent.putExtra("detail",holder.txtDetail.getText().toString());
 		intent.putExtra("imagepath",holder.imgPath);
+		intent.putExtra("lat",holder.lat);
+		intent.putExtra("lon",holder.lon);
 		TabShopListActivityGroup parent = (TabShopListActivityGroup)getParent();
 		parent.startDetailView(intent);
   }

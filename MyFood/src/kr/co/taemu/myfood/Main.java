@@ -10,6 +10,9 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 public class Main extends TabActivity {
+	
+	public String mapCenterLat = null;
+	public String mapCenterLon = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
