@@ -10,7 +10,12 @@ import kr.co.taemu.myfood.shopcmd.SearchShopByRange;
 import kr.co.taemu.myfood.shopcmd.ShopCommand;
 import kr.co.taemu.myfood.shopcmd.ShopCommand.OnCompleteCallback;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -18,13 +23,16 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class TabShopMap extends MapActivity implements OnClickListener, OnCompleteCallback {
 	Drawable drawable;
-	
+
 	List<Overlay> list;
+	ShopOverlay shopOverlay;
+	MyLocationOverlay myLocationOverlay;
 
 	ShopDAO dao;
 	HashMap<Integer, ShopCommand> cmds;
@@ -35,14 +43,20 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 
 	MapView mapView;
 	MapController mc;
+
+	int clat;
+	int clon;
 	
+	MyLocationListener listener;
+	LocationManager lm;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_shop_map);
-
 		setupMap();
 
+		findViewById(R.id.btnMyLocation).setOnClickListener(this);
 		findViewById(R.id.btnSearchPlaces).setOnClickListener(this);
 		findViewById(R.id.btnGenerateData).setOnClickListener(this);
 		findViewById(R.id.btnResetData).setOnClickListener(this);
@@ -71,38 +85,37 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		cmds.put(R.id.btnSearchPlaces, ssbr);
 		cmds.put(R.id.btnGenerateData, new BulkInsertShop(dao, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 1000));
 		cmds.put(R.id.btnResetData, new ResetShop(dao));
-		
-		drawCenterMarker();
+
+		setupLocation();
+		myLocationOverlay = new MyLocationOverlay(this,mapView);
+		list.add(myLocationOverlay);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		lm.removeUpdates(listener);
+		myLocationOverlay.disableMyLocation();
+		list.remove(myLocationOverlay);
 		dao.close();
 	}
-	
-	
+
 	public void drawCenterMarker() {
-		Main m = (Main)getParent();
-		String lat = m.mapCenterLat;
-		String lon = m.mapCenterLon;
-		if ( lat != null && lon != null ) {
-			ShopOverlay shopOverlay = new ShopOverlay(drawable);
-			int dlat = (int)(Double.parseDouble(lat) * 1E6);
-			int dlon = (int)(Double.parseDouble(lon) * 1E6);
-			GeoPoint p = new GeoPoint(dlat, dlon);
-			OverlayItem overlayItem = new OverlayItem(p, "", "");
-			shopOverlay.addOverlay(overlayItem);
-			list.add(shopOverlay);
-			mc.animateTo(p);
-		}
+		;
+		ShopOverlay shopOverlay = new ShopOverlay(drawable);
+		GeoPoint p = new GeoPoint(clat, clon);
+		OverlayItem overlayItem = new OverlayItem(p, "", "");
+		shopOverlay.addOverlay(overlayItem);
+		list.add(shopOverlay);
+		mc.animateTo(p);
+		mapView.invalidate();
 	}
 
 	private void setupMap() {
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(false);
-		
+
 		mc = mapView.getController();
 		drawable = this.getResources().getDrawable(R.drawable.arrow);
 		list = mapView.getOverlays();
@@ -111,7 +124,12 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 
 	public void onClick(View v) {
 		updatePositionParameter();
-		cmds.get(v.getId()).exec();
+		if ( v.getId() == R.id.btnMyLocation) {
+			GeoPoint p = new GeoPoint(clat, clon);
+			mc.animateTo(p);
+		} else {
+			cmds.get(v.getId()).exec();
+		}
 	}
 
 	private void updatePositionParameter() {
@@ -139,17 +157,52 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 	}
 
 	public void onComplete(ArrayList<ShopDTO> shops) {
-		list.clear();
-		ShopOverlay shopOverlay = new ShopOverlay(drawable);
-		for (ShopDTO shop : shops) {
-			int iLat = (int) (Double.parseDouble(shop.getLat()) * 1E6);
-			int iLon = (int) (Double.parseDouble(shop.getLon()) * 1E6);
-			GeoPoint p = new GeoPoint(iLat, iLon);
-			OverlayItem overlayItem = new OverlayItem(p, "", "");
-			shopOverlay.addOverlay(overlayItem);
+		if ( shopOverlay != null ) {
+			list.remove(shopOverlay);
 		}
-		list.add(shopOverlay);
-		mapView.invalidate();
+		shopOverlay = new ShopOverlay(drawable);
+		if (shops != null) {
+			for (ShopDTO shop : shops) {
+				int iLat = (int) (Double.parseDouble(shop.getLat()) * 1E6);
+				int iLon = (int) (Double.parseDouble(shop.getLon()) * 1E6);
+				GeoPoint p = new GeoPoint(iLat, iLon);
+				OverlayItem overlayItem = new OverlayItem(p, "", "");
+				shopOverlay.addOverlay(overlayItem);
+				list.add(shopOverlay);
+				mapView.invalidate();
+			}
+		}
 	}
-	
+
+	private void setupLocation() {
+		lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		String best = lm.getBestProvider(criteria, true);
+		Log.e("GPS",best);
+		listener = new MyLocationListener();
+		long minTime = 1000;
+		float minDistance = 0;
+		lm.requestLocationUpdates(best, minTime, minDistance, listener);
+	}
+
+	class MyLocationListener implements LocationListener {
+
+		public void onLocationChanged(Location location) {
+			clat = (int) (location.getLatitude() * 1E6);
+			clon = (int) (location.getLongitude() * 1E6);
+			Log.e("LOC", "lat: " + clat + " lon: " + clon);
+//			drawCenterMarker();
+		}
+
+		public void onProviderDisabled(String provider) {
+		}
+
+		public void onProviderEnabled(String provider) {
+		}
+
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+
+	}
+
 }
