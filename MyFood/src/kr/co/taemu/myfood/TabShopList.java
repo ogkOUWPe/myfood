@@ -11,99 +11,83 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
-public class TabShopList extends Activity implements OnClickListener, OnItemClickListener, OnCompleteCallback {
+public class TabShopList extends Activity implements OnItemClickListener, OnCompleteCallback {
 	ShopDAO dao;
 	ArrayList<ShopDTO> shops;
 	ShopDTO shopToInsert;
 	ShopAdapter adapter;
 	ListView lstShops;
-	EditText edtSearch;
-	StringBuilder query;
 
 	HashMap<Integer, ShopCommand> cmds;
-	
-	private int index=0;
-	private int top=0;
-	
+
+	private int index = 0;
+	private int top = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_shop_list);
 
-		edtSearch = (EditText) findViewById(R.id.editText1);
 		lstShops = (ListView) findViewById(R.id.lstShops);
-
-		((Button) findViewById(R.id.btnSearch)).setOnClickListener(this);
 		lstShops.setOnItemClickListener(this);
+		
+		dao = new ShopDAO(this);
+		dao.open();
+
+		shops = new ArrayList<ShopDTO>();
+		adapter = new ShopAdapter(this, shops);
+		lstShops.setAdapter(adapter);
+		
+		
+		cmds = new HashMap<Integer, ShopCommand>();
+		SearchShop ss = new SearchShop(dao, adapter, null, shops);
+		ss.setOnComplete(this);
+		cmds.put(R.id.btnSearch, ss);
 
 	}
 	
 	@Override
+	protected void onDestroy() {
+	  super.onDestroy();
+	  dao.close();
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
-		dao = new ShopDAO(this);
-		dao.open();
-
-		ArrayList<ShopDTO> allShops = dao.fetchAllShop();
-		if (allShops != null) {
-			shops = allShops;
-		} else {
-			shops = new ArrayList<ShopDTO>();
-		}
-		adapter = new ShopAdapter(this, shops);
-		lstShops.setAdapter(adapter);
-		
+		cmds.get(R.id.btnSearch).exec();
 		lstShops.setSelectionFromTop(index, top);
-
-		query = new StringBuilder();
-		cmds = new HashMap<Integer, ShopCommand>();
-		SearchShop ss = new SearchShop(dao, adapter, query, shops);
-		ss.setOnComplete(this);
-		cmds.put(R.id.btnSearch, ss);
-		
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		dao.close();
-		edtSearch.setText("");
-		
 		index = lstShops.getFirstVisiblePosition();
-	  View v = lstShops.getChildAt(0);
-	  top = (v == null) ? 0 : v.getTop();
-	}
-
-	public void onClick(View v) {
-		query.delete(0, query.length());
-		query.append(edtSearch.getText().toString());
-		cmds.get(v.getId()).exec();
+		View v = lstShops.getChildAt(0);
+		top = (v == null) ? 0 : v.getTop();
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-	  Intent intent = new Intent(this,TabShopView.class);
-	  ViewHolder holder = (ViewHolder)arg1.getTag();
-	  intent.putExtra("name",holder.txtName.getText().toString());
-		intent.putExtra("tel",holder.txtTel.getText().toString());
-		intent.putExtra("detail",holder.txtDetail.getText().toString());
-		intent.putExtra("imagepath",holder.imgPath);
-		intent.putExtra("lat",holder.lat);
-		intent.putExtra("lon",holder.lon);
-		TabShopListActivityGroup parent = (TabShopListActivityGroup)getParent();
+		Intent intent = new Intent(this, TabShopView.class);
+		ViewHolder holder = (ViewHolder) arg1.getTag();
+		intent.putExtra("name", holder.txtName.getText().toString());
+		intent.putExtra("tel", holder.txtTel.getText().toString());
+		intent.putExtra("detail", holder.txtDetail.getText().toString());
+		intent.putExtra("imagepath", holder.imgPath);
+		intent.putExtra("lat", holder.lat);
+		intent.putExtra("lon", holder.lon);
+		TabShopListActivityGroup parent = (TabShopListActivityGroup) getParent();
 		parent.setDetailIntent(intent);
 		parent.startDetailView(false);
-  }
-	
-  public void onComplete(ArrayList<ShopDTO> shops) {
+	}
+
+	public void onComplete(ArrayList<ShopDTO> shops) {
 		this.shops.clear();
 		this.shops.addAll(shops);
 		adapter.notifyDataSetChanged();
-  }
+	}
 }

@@ -13,13 +13,14 @@ public class SearchShop extends ShopCommand {
 	}
 
 	public void exec() {
-		String shopNameForQuery = query.toString();
-		if (shopNameForQuery.equals("")) {
+		String shopNameForQuery = (query == null) ? null : query.toString();
+		
+		if ( shopNameForQuery == null || shopNameForQuery.equals("")) {
 			ArrayList<ShopDTO> allShops = dao.fetchAllShop();
 			if (allShops != null && cb != null) {
 				cb.onComplete(allShops);
 			}
-		} else if (!shopNameForQuery.equals("")) {
+		} else {
 			ArrayList<ShopDTO> matchedShops = dao.fetchShopByName(shopNameForQuery);
 			if (matchedShops != null && cb != null) {
 				cb.onComplete(matchedShops);
