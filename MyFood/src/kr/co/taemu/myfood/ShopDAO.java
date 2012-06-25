@@ -28,6 +28,18 @@ public class ShopDAO {
 	public void close() {
 		doh.close();
 	}
+	
+	public void beginTransaction() {
+		db.beginTransaction();
+	}
+	
+	public void endTransaction() {
+		db.endTransaction();
+	}
+	
+	public void setTransactionSuccessful() {
+		db.setTransactionSuccessful();
+	}
 
 	public boolean insertShop(ShopDTO shop) {
 		String sql = "insert into " + ShopDOH.TBL + "(" + 

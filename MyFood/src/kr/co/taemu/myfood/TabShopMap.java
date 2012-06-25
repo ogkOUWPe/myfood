@@ -87,8 +87,6 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		cmds.put(R.id.btnResetData, new ResetShop(dao));
 
 		setupLocation();
-		myLocationOverlay = new MyLocationOverlay(this,mapView);
-		list.add(myLocationOverlay);
 	}
 
 	@Override
@@ -96,7 +94,6 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		super.onPause();
 		lm.removeUpdates(listener);
 		myLocationOverlay.disableMyLocation();
-		list.remove(myLocationOverlay);
 		dao.close();
 	}
 
@@ -115,11 +112,12 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(false);
-
 		mc = mapView.getController();
 		drawable = this.getResources().getDrawable(R.drawable.arrow);
 		list = mapView.getOverlays();
 		mc.setZoom(15); // 1 ~ 21
+		myLocationOverlay = new MyLocationOverlay(this,mapView);
+		list.add(myLocationOverlay);
 	}
 
 	public void onClick(View v) {
@@ -191,6 +189,9 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 			clat = (int) (location.getLatitude() * 1E6);
 			clon = (int) (location.getLongitude() * 1E6);
 			Log.e("LOC", "lat: " + clat + " lon: " + clon);
+			if ( !myLocationOverlay.isMyLocationEnabled()) {
+				myLocationOverlay.enableMyLocation();
+			}
 //			drawCenterMarker();
 		}
 
