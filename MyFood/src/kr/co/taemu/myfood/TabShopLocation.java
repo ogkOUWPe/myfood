@@ -36,6 +36,17 @@ public class TabShopLocation extends MapActivity implements OnClickListener {
 	  findViewById(R.id.btnReturnToDetail).setOnClickListener(this);
 	}
 	
+	@Override
+	protected void onResume() {
+	  super.onResume();
+	  mapView.invalidate();
+	}
+	@Override
+	protected void onPause() {
+	  super.onPause();
+	  mapView.invalidate();
+	}
+	
 	private void setupMap() {
 		mapView = (MapView) findViewById(R.id.mapLocation);
 		mapView.setBuiltInZoomControls(true);

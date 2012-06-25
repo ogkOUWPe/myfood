@@ -94,7 +94,9 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		super.onPause();
 		lm.removeUpdates(listener);
 		myLocationOverlay.disableMyLocation();
+		mapView.invalidate();
 		dao.close();
+		
 	}
 
 	public void drawCenterMarker() {
@@ -159,7 +161,7 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 			list.remove(shopOverlay);
 		}
 		shopOverlay = new ShopOverlay(drawable);
-		if (shops != null) {
+		if (shops != null && shops.size() > 0 ) {
 			for (ShopDTO shop : shops) {
 				int iLat = (int) (Double.parseDouble(shop.getLat()) * 1E6);
 				int iLon = (int) (Double.parseDouble(shop.getLon()) * 1E6);
