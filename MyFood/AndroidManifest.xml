@@ -31,6 +31,8 @@
         </activity>
         <activity android:name=".TabShopView" >
         </activity>
+        <activity android:name=".TabShopLocation" >
+        </activity>
         <activity android:name=".TabShopMap" >
         </activity>
         <activity android:name=".UnimplementedSubPage03" >

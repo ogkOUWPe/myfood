@@ -66,7 +66,7 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		cmds = new HashMap<Integer, ShopCommand>();
 		SearchShop ss = new SearchShop(dao, adapter, query, shops);
 		ss.setOnComplete(this);
-		cmds.put(R.id.btnSearch, new SearchShop(dao, adapter, query, shops));
+		cmds.put(R.id.btnSearch, ss);
 		
 	}
 
@@ -97,10 +97,10 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		intent.putExtra("lat",holder.lat);
 		intent.putExtra("lon",holder.lon);
 		TabShopListActivityGroup parent = (TabShopListActivityGroup)getParent();
-		parent.startDetailView(intent);
+		parent.setDetailIntent(intent);
+		parent.startDetailView(false);
   }
-
-	@Override
+	
   public void onComplete(ArrayList<ShopDTO> shops) {
 		this.shops.clear();
 		this.shops.addAll(shops);

@@ -2,6 +2,8 @@ package kr.co.taemu.myfood;
 
 import java.util.ArrayList;
 
+import kr.co.taemu.myfood.ShopAdapter.ViewHolder;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.gesture.Gesture;
@@ -17,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TabShopView extends Activity implements OnClickListener, OnGesturePerformedListener {
 	
@@ -59,8 +60,6 @@ public class TabShopView extends Activity implements OnClickListener, OnGestureP
 		findViewById(R.id.btnGoToMapView).setOnClickListener(this);
 		
 		GestureOverlayView gestureOverlayView = (GestureOverlayView)findViewById(R.id.gestureOverlay);
-		View inflate = getLayoutInflater().inflate(R.layout.main, null);
-		gestureOverlayView.addView(inflate);
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
 		if (!gestureLib.load()) {
@@ -79,14 +78,14 @@ public class TabShopView extends Activity implements OnClickListener, OnGestureP
 		int id = v.getId();
 		if ( id == R.id.btnBackToList) {
 			tabShopListActivityGroup.startListView();
-		} else if ( id == R.id.btnGoToMapView) {
-			Main m = (Main)tabShopListActivityGroup.getParent();
-			m.mapCenterLat = lat;
-			m.mapCenterLon = lon;
-			m.getTabHost().setCurrentTab(1);
-			tabShopListActivityGroup.startListView();
+		} else if ( id == R.id.btnGoToMapView) {			
+			Intent intent = new Intent(this,TabShopLocation.class);
+			intent.putExtra("lat",lat);
+			intent.putExtra("lon",lon);
+			TabShopListActivityGroup parent = (TabShopListActivityGroup)getParent();
+			parent.setLocationIntent(intent);
+			parent.startLocationView();
 		}
-		
   }
 	
 	@Override
@@ -94,10 +93,16 @@ public class TabShopView extends Activity implements OnClickListener, OnGestureP
 		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
 		for (Prediction prediction : predictions) {
 			if (prediction.score > 1.0) {
-				Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT).show();
-				if ( prediction.name.equals("right")) {
+				if ( prediction.name.equals("left")) {
 					TabShopListActivityGroup tabShopListActivityGroup = (TabShopListActivityGroup)getParent();
 					tabShopListActivityGroup.startListView();
+				} else if ( prediction.name.equals("right")) {
+					Intent intent = new Intent(this,TabShopLocation.class);
+					intent.putExtra("lat",lat);
+					intent.putExtra("lon",lon);
+					TabShopListActivityGroup parent= (TabShopListActivityGroup)getParent();
+					parent.setLocationIntent(intent);
+					parent.startLocationView();
 				}
 			}
 		}
