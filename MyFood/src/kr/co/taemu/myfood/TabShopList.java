@@ -6,6 +6,7 @@ import java.util.HashMap;
 import kr.co.taemu.myfood.ShopAdapter.ViewHolder;
 import kr.co.taemu.myfood.shopcmd.SearchShop;
 import kr.co.taemu.myfood.shopcmd.ShopCommand;
+import kr.co.taemu.myfood.shopcmd.ShopCommand.OnCompleteCallback;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class TabShopList extends Activity implements OnClickListener, OnItemClickListener {
+public class TabShopList extends Activity implements OnClickListener, OnItemClickListener, OnCompleteCallback {
 	ShopDAO dao;
 	ArrayList<ShopDTO> shops;
 	ShopDTO shopToInsert;
@@ -41,6 +42,7 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 
 		((Button) findViewById(R.id.btnSearch)).setOnClickListener(this);
 		lstShops.setOnItemClickListener(this);
+
 	}
 	
 	@Override
@@ -62,7 +64,10 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 
 		query = new StringBuilder();
 		cmds = new HashMap<Integer, ShopCommand>();
+		SearchShop ss = new SearchShop(dao, adapter, query, shops);
+		ss.setOnComplete(this);
 		cmds.put(R.id.btnSearch, new SearchShop(dao, adapter, query, shops));
+		
 	}
 
 	@Override
@@ -93,5 +98,12 @@ public class TabShopList extends Activity implements OnClickListener, OnItemClic
 		intent.putExtra("lon",holder.lon);
 		TabShopListActivityGroup parent = (TabShopListActivityGroup)getParent();
 		parent.startDetailView(intent);
+  }
+
+	@Override
+  public void onComplete(ArrayList<ShopDTO> shops) {
+		this.shops.clear();
+		this.shops.addAll(shops);
+		adapter.notifyDataSetChanged();
   }
 }

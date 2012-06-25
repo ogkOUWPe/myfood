@@ -18,4 +18,14 @@ public abstract class ShopCommand implements Command {
 		this.query = query;
 		this.shops = shops;
 	}
+	
+	public interface OnCompleteCallback {
+		void onComplete(ArrayList<ShopDTO> shops);
+	}
+
+	protected OnCompleteCallback cb;
+
+	public void setOnComplete(OnCompleteCallback cb) {
+		this.cb = cb;
+	}
 }

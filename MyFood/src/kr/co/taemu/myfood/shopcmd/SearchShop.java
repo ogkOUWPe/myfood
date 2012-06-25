@@ -16,17 +16,13 @@ public class SearchShop extends ShopCommand {
 		String shopNameForQuery = query.toString();
 		if (shopNameForQuery.equals("")) {
 			ArrayList<ShopDTO> allShops = dao.fetchAllShop();
-			if (allShops != null) {
-				shops.clear();
-				shops.addAll(allShops);
-				adapter.notifyDataSetChanged();
+			if (allShops != null && cb != null) {
+				cb.onComplete(allShops);
 			}
 		} else if (!shopNameForQuery.equals("")) {
 			ArrayList<ShopDTO> matchedShops = dao.fetchShopByName(shopNameForQuery);
-			if (matchedShops != null) {
-				shops.clear();
-				shops.addAll(matchedShops);
-				adapter.notifyDataSetChanged();
+			if (matchedShops != null && cb != null) {
+				cb.onComplete(matchedShops);
 			}
 		}
 	}

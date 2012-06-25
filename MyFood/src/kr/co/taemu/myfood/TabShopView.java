@@ -1,8 +1,15 @@
 package kr.co.taemu.myfood;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
-import android.app.TabActivity;
 import android.content.Intent;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,11 +17,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class TabShopView extends Activity implements OnClickListener {
+public class TabShopView extends Activity implements OnClickListener, OnGesturePerformedListener {
 	
 	private String lat;
 	private String lon;
+	
+	private GestureLibrary gestureLib;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +57,20 @@ public class TabShopView extends Activity implements OnClickListener {
 		
 		findViewById(R.id.btnBackToList).setOnClickListener(this);
 		findViewById(R.id.btnGoToMapView).setOnClickListener(this);
+		
+		GestureOverlayView gestureOverlayView = (GestureOverlayView)findViewById(R.id.gestureOverlay);
+		View inflate = getLayoutInflater().inflate(R.layout.main, null);
+		gestureOverlayView.addView(inflate);
+		gestureOverlayView.addOnGesturePerformedListener(this);
+		gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
+		if (!gestureLib.load()) {
+			finish();
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+	  super.onDestroy();
 	}
 
 	@Override
@@ -61,6 +85,21 @@ public class TabShopView extends Activity implements OnClickListener {
 			m.mapCenterLon = lon;
 			m.getTabHost().setCurrentTab(1);
 			tabShopListActivityGroup.startListView();
+		}
+		
+  }
+	
+	@Override
+  public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+		for (Prediction prediction : predictions) {
+			if (prediction.score > 1.0) {
+				Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT).show();
+				if ( prediction.name.equals("right")) {
+					TabShopListActivityGroup tabShopListActivityGroup = (TabShopListActivityGroup)getParent();
+					tabShopListActivityGroup.startListView();
+				}
+			}
 		}
   }
 }

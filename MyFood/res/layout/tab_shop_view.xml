@@ -1,49 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.gesture.GestureOverlayView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gestureOverlay"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content"
+    android:gestureColor="#00000000"
+    android:uncertainGestureColor="#00000000"
+     >
 
-    <TextView
-        android:id="@+id/txtShopName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txtShopTel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/txtShopDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+            <Button
+                android:id="@+id/btnBackToList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="BACK" />
 
-    <TextView
-        android:id="@+id/txtShopImagePath"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+            <Button
+                android:id="@+id/btnGoToMapView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MAPVIEW" />
+        </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/no_image" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/btnBackToList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BACK" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btnGoToMapView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MAPVIEW" />
- 
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/no_image" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/txtShopDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/txtShopImagePath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/txtShopName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/txtShopTel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/txtScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                this is multiple line text\n
+                " />
+        </ScrollView>
+    </LinearLayout>
+
+</android.gesture.GestureOverlayView>

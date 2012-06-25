@@ -8,6 +8,7 @@ import kr.co.taemu.myfood.shopcmd.BulkInsertShop;
 import kr.co.taemu.myfood.shopcmd.ResetShop;
 import kr.co.taemu.myfood.shopcmd.SearchShopByRange;
 import kr.co.taemu.myfood.shopcmd.ShopCommand;
+import kr.co.taemu.myfood.shopcmd.ShopCommand.OnCompleteCallback;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +21,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class TabShopMap extends MapActivity implements OnClickListener, SearchShopByRange.OnCompleteCallback {
+public class TabShopMap extends MapActivity implements OnClickListener, OnCompleteCallback {
 	Drawable drawable;
 	
 	List<Overlay> list;

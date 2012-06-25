@@ -11,16 +11,6 @@ import com.google.android.maps.MapView;
 
 public class SearchShopByRange extends ShopCommand {
 
-	public interface OnCompleteCallback {
-		void onComplete(ArrayList<ShopDTO> shops);
-	}
-
-	private OnCompleteCallback cb;
-
-	public void setOnComplete(OnCompleteCallback cb) {
-		this.cb = cb;
-	}
-
 	private StringBuilder sbminLat;
 	private StringBuilder sbminLon;
 	private StringBuilder sbmaxLat;
