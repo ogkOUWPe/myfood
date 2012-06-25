@@ -166,10 +166,10 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 				GeoPoint p = new GeoPoint(iLat, iLon);
 				OverlayItem overlayItem = new OverlayItem(p, "", "");
 				shopOverlay.addOverlay(overlayItem);
-				list.add(shopOverlay);
-				mapView.invalidate();
 			}
+			list.add(shopOverlay);
 		}
+		mapView.invalidate();
 	}
 
 	private void setupLocation() {
