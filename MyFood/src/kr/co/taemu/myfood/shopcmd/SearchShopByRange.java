@@ -16,15 +16,21 @@ public class SearchShopByRange extends ShopCommand {
 	private StringBuilder sbmaxLat;
 	private StringBuilder sbmaxLon;
 	private int limit = 10;
+	
+	private StringBuilder sbrefLat;
+	private StringBuilder sbrefLon;
 
 	public SearchShopByRange(ShopDAO dao, MapView mapView, StringBuilder sbminLat, StringBuilder sbminLon,
-	    StringBuilder sbmaxLat, StringBuilder sbmaxLon, int limit) {
+	    StringBuilder sbmaxLat, StringBuilder sbmaxLon, StringBuilder srefLat, StringBuilder srefLon,int limit) {
 		super(dao, null, null, null);
 		this.sbminLat = sbminLat;
 		this.sbminLon = sbminLon;
 		this.sbmaxLat = sbmaxLat;
 		this.sbmaxLon = sbmaxLon;
+		this.sbrefLat = srefLat;
+		this.sbrefLon = srefLon;
 		this.limit = limit;
+		
 	}
 
 	public void exec() {
@@ -32,10 +38,20 @@ public class SearchShopByRange extends ShopCommand {
 		String sminLon = sbminLon.toString();
 		String smaxLat = sbmaxLat.toString();
 		String smaxLon = sbmaxLon.toString();
+		
 		ArrayList<ShopDTO> result = dao.fetchShopByRange(sminLat, sminLon,smaxLat,smaxLon);
 		if (result != null) {
 			// sort by distance
-			Collections.sort(result,new DistanceComparator(sminLat, sminLon,smaxLat,smaxLon));
+			if ( sbrefLat != null && sbrefLon != null) {
+				String refLat = sbrefLat.toString(); 
+				String refLon = sbrefLon.toString();
+				if ( !refLat.equals("") || !refLon.equals("") ) {
+					Collections.sort(result,new DistanceComparator(refLat, refLon));
+				}
+			} else {
+				Collections.sort(result,new DistanceComparator(sminLat, sminLon,smaxLat,smaxLon));
+			}
+			
 			int rs = result.size();
 			shops = new ArrayList<ShopDTO>();
 			for (int i = 0; i < (( limit < rs ) ? limit : rs) ; ++i) {
@@ -56,6 +72,11 @@ public class SearchShopByRange extends ShopCommand {
 		public DistanceComparator(String sminLat,String sminLon,String smaxLat, String smaxLon) {
 			this.refLat = (Double.parseDouble(smaxLat) + Double.parseDouble(sminLat))/2;
 			this.refLon = (Double.parseDouble(smaxLon) + Double.parseDouble(sminLon))/2;
+    }
+		
+		public DistanceComparator(String refLat,String refLon) {
+			this.refLat = Double.parseDouble(refLat);
+			this.refLon = Double.parseDouble(refLon);
     }
 		
 		private double getDistance(double lat, double lon) {

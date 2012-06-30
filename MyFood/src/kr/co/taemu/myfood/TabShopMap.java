@@ -16,8 +16,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -40,13 +42,15 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 	StringBuilder sbminLon;
 	StringBuilder sbmaxLat;
 	StringBuilder sbmaxLon;
+	StringBuilder sbrefLat;
+	StringBuilder sbrefLon;
 
 	MapView mapView;
 	MapController mc;
 
 	int clat;
 	int clon;
-	
+
 	MyLocationListener listener;
 	LocationManager lm;
 
@@ -65,6 +69,8 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		sbminLon = new StringBuilder();
 		sbmaxLat = new StringBuilder();
 		sbmaxLon = new StringBuilder();
+		sbrefLat = new StringBuilder();
+		sbrefLon = new StringBuilder();
 	}
 
 	@Override
@@ -79,7 +85,8 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		dao.open();
 
 		cmds = new HashMap<Integer, ShopCommand>();
-		SearchShopByRange ssbr = new SearchShopByRange(dao, mapView, sbminLat, sbminLon, sbmaxLat, sbmaxLon, 10);
+		SearchShopByRange ssbr = new SearchShopByRange(dao, mapView, sbminLat, sbminLon, sbmaxLat, sbmaxLon, sbrefLat,
+		    sbrefLon, 10);
 		ssbr.setOnComplete(this);
 
 		cmds.put(R.id.btnSearchPlaces, ssbr);
@@ -92,11 +99,13 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 	@Override
 	protected void onPause() {
 		super.onPause();
+		sbrefLat.delete(0, sbrefLat.length());
+		sbrefLon.delete(0, sbrefLon.length());
 		lm.removeUpdates(listener);
 		myLocationOverlay.disableMyLocation();
 		mapView.invalidate();
 		dao.close();
-		
+
 	}
 
 	public void drawCenterMarker() {
@@ -114,17 +123,31 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(false);
+
+		/* android 2.x.x has mapview bug when zooming with pingers */
+		/* while zooming the mapview, if programing drawing something on the map overlays */
+		/* it causes the overlay fill with white color */
+		// if  /* android version is lower than 2.x.x */ 
+		mapView.setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getPointerCount() > 1) {
+					return true;
+				}
+				return false;
+			}
+		});
+
 		mc = mapView.getController();
 		drawable = this.getResources().getDrawable(R.drawable.arrow);
 		list = mapView.getOverlays();
 		mc.setZoom(15); // 1 ~ 21
-		myLocationOverlay = new MyLocationOverlay(this,mapView);
+		myLocationOverlay = new MyLocationOverlay(this, mapView);
 		list.add(myLocationOverlay);
 	}
 
 	public void onClick(View v) {
 		updatePositionParameter();
-		if ( v.getId() == R.id.btnMyLocation) {
+		if (v.getId() == R.id.btnMyLocation) {
 			GeoPoint p = new GeoPoint(clat, clon);
 			mc.animateTo(p);
 		} else {
@@ -157,11 +180,11 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 	}
 
 	public void onComplete(ArrayList<ShopDTO> shops) {
-		if ( shopOverlay != null ) {
+		if (shopOverlay != null) {
 			list.remove(shopOverlay);
 		}
-		shopOverlay = new ShopOverlay(drawable);
-		if (shops != null && shops.size() > 0 ) {
+		if (shops != null && shops.size() > 0) {
+			shopOverlay = new ShopOverlay(drawable);
 			for (ShopDTO shop : shops) {
 				int iLat = (int) (Double.parseDouble(shop.getLat()) * 1E6);
 				int iLon = (int) (Double.parseDouble(shop.getLon()) * 1E6);
@@ -178,7 +201,7 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 		lm = (LocationManager) getSystemService(LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		String best = lm.getBestProvider(criteria, true);
-		Log.e("GPS",best);
+		Log.e("GPS", best);
 		listener = new MyLocationListener();
 		long minTime = 1000;
 		float minDistance = 0;
@@ -191,10 +214,14 @@ public class TabShopMap extends MapActivity implements OnClickListener, OnComple
 			clat = (int) (location.getLatitude() * 1E6);
 			clon = (int) (location.getLongitude() * 1E6);
 			Log.e("LOC", "lat: " + clat + " lon: " + clon);
-			if ( !myLocationOverlay.isMyLocationEnabled()) {
+			sbrefLat.delete(0, sbrefLat.length());
+			sbrefLon.delete(0, sbrefLon.length());
+			sbrefLat.append(Double.toString(location.getLatitude()));
+			sbrefLon.append(Double.toString(location.getLongitude()));
+
+			if (!myLocationOverlay.isMyLocationEnabled()) {
 				myLocationOverlay.enableMyLocation();
 			}
-//			drawCenterMarker();
 		}
 
 		public void onProviderDisabled(String provider) {

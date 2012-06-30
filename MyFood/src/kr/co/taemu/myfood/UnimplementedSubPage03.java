@@ -13,36 +13,40 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-public class UnimplementedSubPage03 extends Activity implements OnClickListener,OnCompleteCallback{
+public class UnimplementedSubPage03 extends Activity implements OnClickListener, OnCompleteCallback {
 	EditText edtSearch;
 	StringBuilder query;
 	HashMap<Integer, ShopCommand> cmds;
 	ShopDAO dao;
-	
+
+	TextView txtSelectedShops;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.unimplemented_subpage03);
-		
+
 		edtSearch = (EditText) findViewById(R.id.editText1);
 		((Button) findViewById(R.id.btnSearch)).setOnClickListener(this);
-		
-		
+
+		txtSelectedShops = (TextView) findViewById(R.id.txtSelectedShops);
+
 		dao = new ShopDAO(this);
 		dao.open();
-		
+
 		query = new StringBuilder();
 		cmds = new HashMap<Integer, ShopCommand>();
 		SearchShop ss = new SearchShop(dao, null, query, null);
 		ss.setOnComplete(this);
 		cmds.put(R.id.btnSearch, ss);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
-	  super.onDestroy();
-	  dao.close();
+		super.onDestroy();
+		dao.close();
 	}
 
 	@Override
@@ -53,14 +57,12 @@ public class UnimplementedSubPage03 extends Activity implements OnClickListener,
 	}
 
 	@Override
-  public void onComplete(ArrayList<ShopDTO> shops) {
+	public void onComplete(ArrayList<ShopDTO> shops) {
 		for (ShopDTO s : shops) {
-	    Log.e("ShopSearch",
-	    		"name: " + s.getName() + 
-	    		"tel: " + s.getTel() + 
-	    		"detail: " + s.getDetail() 
-	    		);
-    }
-  }
+			String msg = "name: " + s.getName() + " lat: " + s.getLat() + " lon: " + s.getLon()+"\n";
+			Log.e("ShopSearch", msg);
+			txtSelectedShops.append(msg);
+		}
+	}
 
 }

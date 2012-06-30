@@ -12,8 +12,8 @@
             android:id="@+id/editText1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Search By Name"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:hint="Search By Name" >
 
             <requestFocus />
         </EditText>
@@ -24,7 +24,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:text="Search" />
-
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/txtSelectedShops"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
 </LinearLayout>
